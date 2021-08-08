@@ -1,17 +1,23 @@
+import http from "http";
 import express, { Response } from "express";
 import env from "dotenv";
+import WebSocket from "ws";
 
 env.config();
 
 const app = express();
 
-app.set("view engine", "pug");
-app.set("views", __dirname + "/views");
+app.use(express.static(__dirname + "/public"));
 
-app.use("/public", express.static(__dirname + "/public"));
+// app.listen(process.env.PORT, () => {
+//   console.log("Server running on port " + process.env.PORT);
+// });
 
-app.get("/", (_, res: Response) => res.render("home"));
+const server = http.createServer(app);
 
-app.listen(process.env.PORT, () => {
+// You don't have to pass the server, we just pass the server so that the can run in the same port
+const wss = new WebSocket.Server({ server });
+
+server.listen(process.env.PORT, () => {
   console.log("Server running on port " + process.env.PORT);
 });
