@@ -4,7 +4,8 @@
   "description": "Zoom Clone using WebRTC and WebSocket",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/server.ts",
+    "dev:server": "nodemon --exec ts-node src/server.ts",
+    "dev:client": "tsc ./src/public/js/app.ts -w",
     "build:css": "postcss ./src/public/css/tailwind.css -o ./src/public/css/styles.css",
     "build": "tsc"
   },
