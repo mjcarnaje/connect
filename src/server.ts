@@ -9,16 +9,26 @@ const app = express();
 
 app.use(express.static(__dirname + "/public"));
 
-// app.listen(process.env.PORT, () => {
-//   console.log("Server running on port " + process.env.PORT);
-// });
-
 const server = http.createServer(app);
 const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log(socket);
+  socket.on("enterRoom", (roomName, done) => {
+    console.log(roomName);
+
+    setTimeout(() => {
+      done();
+    }, 5000);
+  });
 });
+
+server.listen(process.env.PORT, () => {
+  console.log("Server running on port " + process.env.PORT);
+});
+
+// app.listen(process.env.PORT, () => {
+//   console.log("Server running on port " + process.env.PORT);
+// });
 
 // // You don't have to pass the server, we just pass the server so that the can run in the same port
 // const wss = new WebSocket.Server({ server });
@@ -48,7 +58,3 @@ io.on("connection", (socket) => {
 //     }
 //   });
 // });
-
-server.listen(process.env.PORT, () => {
-  console.log("Server running on port " + process.env.PORT);
-});
