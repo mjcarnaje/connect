@@ -1,8 +1,7 @@
 module.exports = {
   mode: "jit",
-
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  purge: ["./src/**/*.html"],
+  darkMode: false,
   theme: {
     fontFamily: {
       sans: ["'Inter'", "sans-serif"],
