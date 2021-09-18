@@ -1,13 +1,11 @@
+import "dotenv/config";
 import http from "http";
 import express from "express";
-import env from "dotenv";
 import { Server } from "socket.io";
-
-env.config();
 
 const app = express();
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/../client/public"));
 
 const server = http.createServer(app);
 const io = new Server(server);

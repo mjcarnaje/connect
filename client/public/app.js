@@ -1,5 +1,7 @@
-// @ts-ignore
-var socket = io();
+"use strict";
+exports.__esModule = true;
+var socket_io_client_1 = require("socket.io-client");
+var socket = socket_io_client_1.io();
 var welcomeEl = document.getElementById("welcome");
 var welcomeForm = welcomeEl.querySelector("form");
 welcomeForm.addEventListener("submit", function (event) {
