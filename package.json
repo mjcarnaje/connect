@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev:server": "nodemon --exec ts-node src/server.ts",
-    "dev:client": "tsc ./src/public/js/app.ts -w",
-    "build:css": "postcss ./src/public/css/tailwind.css -o ./src/public/css/styles.css",
+    "dev:client": "tsc client/app.ts --outDir client/public -w",
+    "dev:css": "TAILWIND_MODE=watch tailwindcss -o client/public/styles.css --watch",
+    "dev": "concurrently \"yarn run dev:server\" \"yarn run dev:client\"",
+    "build:css": "postcss client/tailwind.css -o client/public/styles.css",
     "build": "tsc"
   },
   "keywords": [],
