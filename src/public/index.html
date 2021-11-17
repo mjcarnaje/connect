@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="grid w-6/12 h-full mx-auto">
+        <div class="w-full mb-10">
+          <form id="nickNameForm">
+            <label
+              for="nickNameInput"
+              class="block mb-2 text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            >
+              Your Nickname
+            </label>
+            <input
+              id="nickNameInput"
+              name="nickNameInput"
+              class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            ></input>
+            <button type='submit' class="inline-flex mt-2 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >Save</button >
+          </form>
+          <form id="messageForm">
+            <label
+              for="messageInput"
+              class="block mb-2 text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+            >
+              Message
+            </label>
+            <textarea
+              id="messageInput"
+              name="messageInput"
+              rows="3"
+              class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+            ></textarea>
+            <button type='submit' class="inline-flex mt-2 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >Send</button>
+          </form>
+        </div>
+        <div class="p-4 rounded-md shadow-sm">
+          <p class='mb-2 font-medium'>Messages</p>
+          <ul class='space-y-1' id="messageList"></ul>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="js/app.js" defer></script>
+</html>

@@ -1,6 +1,6 @@
 module.exports = {
   mode: "jit",
-  purge: ["./client/public/index.html"],
+  purge: ["./src/**/*.html"],
   darkMode: false,
   theme: {
     fontFamily: {
@@ -10,5 +10,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [],
 };
