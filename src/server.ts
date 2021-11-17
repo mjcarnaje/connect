@@ -1,9 +1,7 @@
+import "dotenv/config";
 import http from "http";
 import express from "express";
-import env from "dotenv";
 import WebSocket from "ws";
-
-env.config();
 
 const app = express();
 
@@ -23,16 +21,23 @@ type ISocket = WebSocket & { nickname: string };
 const sockets: WebSocket[] = [];
 
 wss.on("connection", (socket: ISocket) => {
+  // save / push every browser connection
   sockets.push(socket);
+
   socket["nickname"] = "Anonymous";
+
   console.log("Connected to Browser ✔!!");
-  socket.on("close", () => console.log("Disconnected from Browswer ❌!!"));
+
   socket.on("message", (msg) => {
     const message = JSON.parse(msg.toString());
+
+    console.log(msg.toString());
+
     switch (message.type) {
       case "newMessage":
-        sockets.forEach((_socket) => {
-          _socket.send(`${socket.nickname}: ${message.payload}`);
+        // send to each browser
+        sockets.forEach((conn) => {
+          conn.send(`${socket.nickname}: ${message.payload}`);
         });
         break;
       case "nickname":
@@ -42,6 +47,8 @@ wss.on("connection", (socket: ISocket) => {
         break;
     }
   });
+
+  socket.on("close", () => console.log("Disconnected from Browswer ❌!!"));
 });
 
 server.listen(process.env.PORT, () => {
