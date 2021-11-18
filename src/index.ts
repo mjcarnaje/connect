@@ -21,9 +21,21 @@ const httpServer = http.createServer(app);
 const wsServer = new Server(httpServer);
 
 wsServer.on("connection", (socket) => {
+  socket.onAny((event) => console.log(`Event: ${event}`));
+
   socket.on<IConnEvent>("enter_room", (roomName, done) => {
-    console.log(roomName);
-    setTimeout(() => done("hello from backend"), 3000);
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit<IConnEvent>("joined");
+  });
+
+  socket.on<IConnEvent>("disconnecting", () => {
+    socket.rooms.forEach((room) => socket.to(room).emit<IConnEvent>("bye"));
+  });
+
+  socket.on<IConnEvent>("new_message", (newMessage, roomName, done) => {
+    socket.to(roomName).emit<IConnEvent>("new_message", newMessage);
+    done();
   });
 });
 
