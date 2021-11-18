@@ -1,33 +1,23 @@
 {
-  "name": "zone-clone",
+  "name": "zoom-clone",
   "version": "1.0.0",
   "description": "Zoom Clone using WebRTC and WebSocket",
   "main": "index.js",
+  "repository": "https://github.com/mjcarnaje/zoom-clone.git",
+  "author": "Mj Carnaje",
+  "license": "MIT",
   "scripts": {
-    "dev:server": "nodemon --exec ts-node src/server.ts",
-    "dev:client": "tsc ./src/public/js/app.ts -w",
-    "build:css": "postcss ./src/public/css/tailwind.css -o ./src/public/css/styles.css",
-    "build": "tsc"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.13",
-    "@types/node": "^16.4.13",
-    "@types/ws": "^7.4.7",
-    "autoprefixer": "^10.3.1",
-    "postcss": "^8.3.6",
-    "postcss-cli": "^8.3.1",
-    "tailwindcss": "^2.2.7",
-    "ts-node": "^10.1.0",
-    "typescript": "^4.3.5"
+    "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "nodemon": "^2.0.12",
-    "ws": "^8.0.0"
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16.11.7",
+    "@types/pug": "^2.0.5",
+    "pug": "^3.0.2",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
   }
 }
