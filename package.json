@@ -7,10 +7,13 @@
   "author": "Mj Carnaje",
   "license": "MIT",
   "scripts": {
+    "dev:client": "tsc ./src/public/index.ts --watch",
     "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "socket.io": "^4.3.2",
+    "socket.io-client": "^4.3.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
