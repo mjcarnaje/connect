@@ -1,5 +1,10 @@
 import express from "express";
+import http from "http";
 import path from "path";
+import { Server } from "socket.io";
+import { IConnEvent } from "./types";
+
+type IEvents = "enter_room";
 
 const app = express();
 const port = 3000;
@@ -12,6 +17,16 @@ app.get("/", (req, res) => {
   res.render("index", { title: "Zoom Clone!" });
 });
 
-app.listen(port, () => {
+const httpServer = http.createServer(app);
+const wsServer = new Server(httpServer);
+
+wsServer.on("connection", (socket) => {
+  socket.on<IConnEvent>("enter_room", (roomName, done) => {
+    console.log(roomName);
+    setTimeout(() => done("hello from backend"), 3000);
+  });
+});
+
+httpServer.listen(port, () => {
   console.log(`Connected successfully on port ${port}`);
 });

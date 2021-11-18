@@ -6,9 +6,14 @@ html(lang="en")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
     title Zoom Clone
-    link(href="./styles/style.css", rel="stylesheet")
-    link(href="./styles/style.css", rel="stylesheet")
+    link(href="/public/styles.css", rel="stylesheet")
   body
-    p Hello #{title}!
+    h1 Hello #{title}!
+    main 
+      div#welcome
+        form 
+          input(type="text", placeholder="Join Room", required)
+          button Enter Room
 
-    script(src="/public/index.js") 
+    script(src="/socket.io/socket.io.js") 
+    script(type="module", src="/public/index.js") 
