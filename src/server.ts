@@ -7,6 +7,7 @@ import {
   ServerToClientEvents,
   SocketData,
 } from "./types";
+import { instrument } from "@socket.io/admin-ui";
 
 const app = express();
 const port = 3000;
@@ -22,8 +23,18 @@ app.get("/", (req, res) => {
 const httpServer = http.createServer(app);
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents, SocketData>(
-  httpServer
+  httpServer,
+  {
+    cors: {
+      origin: ["https://admin.socket.io"],
+      credentials: true,
+    },
+  }
 );
+
+instrument(io, {
+  auth: false,
+});
 
 io.on("connection", (socket) => {
   socket.data.nickname = "Anonymous";
