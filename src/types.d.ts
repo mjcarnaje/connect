@@ -1,4 +1,5 @@
 export interface ServerToClientEvents {
+  new_rooms: (publicRooms: string[]) => void;
   joined: (nickname: string) => void;
   bye: (nickname: string) => void;
   new_message: (newMessage: string) => void;

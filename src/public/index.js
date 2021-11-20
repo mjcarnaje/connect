@@ -46,6 +46,19 @@ socket.on("bye", function (user) {
 socket.on("new_message", function (newMessage) {
     addMessage(newMessage);
 });
+socket.on("new_rooms", function (publicRooms) {
+    var roomList = welcomeDiv.querySelector("ul");
+    roomList.innerHTML = "";
+    if (publicRooms.length === 0) {
+        roomList.innerHTML = "";
+        return;
+    }
+    publicRooms.forEach(function (publicRoom) {
+        var room = document.createElement("li");
+        room.innerText = publicRoom;
+        roomList.appendChild(room);
+    });
+});
 // Helpers
 function getElement(id) {
     return document.getElementById(id);

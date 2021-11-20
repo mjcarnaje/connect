@@ -69,6 +69,22 @@ socket.on("new_message", (newMessage: string) => {
   addMessage(newMessage);
 });
 
+socket.on("new_rooms", (publicRooms) => {
+  const roomList = <HTMLUListElement>welcomeDiv.querySelector("ul");
+
+  roomList.innerHTML = "";
+
+  if (publicRooms.length === 0) {
+    roomList.innerHTML = "";
+    return;
+  }
+  publicRooms.forEach((publicRoom) => {
+    const room = document.createElement("li");
+    room.innerText = publicRoom;
+    roomList.appendChild(room);
+  });
+});
+
 // Helpers
 
 function getElement(id: string): HTMLInputElement {

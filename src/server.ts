@@ -28,6 +28,17 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, SocketData>(
 io.on("connection", (socket) => {
   socket.data.nickname = "Anonymous";
 
+  function publicRooms(): string[] {
+    const { sids, rooms } = io.sockets.adapter;
+    const public_rooms: string[] = [];
+    rooms.forEach((_, key) => {
+      if (!sids.get(key)) {
+        public_rooms.push(key);
+      }
+    });
+    return public_rooms;
+  }
+
   socket.onAny((event) => console.log(`Event: ${event}`));
 
   socket.on("enter_room", (nickname, roomId, done) => {
@@ -38,12 +49,18 @@ io.on("connection", (socket) => {
     done();
 
     socket.to(roomId).emit("joined", nickname);
+
+    io.sockets.emit("new_rooms", publicRooms());
   });
 
   socket.on("disconnecting", () => {
     socket.rooms.forEach((room) =>
       socket.to(room).emit("bye", socket.data.nickname)
     );
+  });
+
+  socket.on("disconnect", () => {
+    io.sockets.emit("new_rooms", publicRooms());
   });
 
   socket.on("new_message", (newMessage, roomId, done) => {
