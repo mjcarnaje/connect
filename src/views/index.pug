@@ -5,10 +5,10 @@ html(lang="en")
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0")
-    title Zoom Clone
+    title Connect
     link(href="/public/styles.css", rel="stylesheet")
   body
-    h1 Hello #{title}!
+    h1 #{title}!
     main 
       div#welcome
         form 
@@ -17,7 +17,10 @@ html(lang="en")
       div#room
         h3
         ul
-        form 
+        form#nickname 
+          input(type="text", placeholder="Enter nickname", required)
+          button Save
+        form#message
           input(type="text", placeholder="Enter message", required)
           button Send
 

@@ -1,9 +1,10 @@
-// @ts-expect-error
+// @ts-ignore
 var socket = io();
 var welcome = document.getElementById("welcome");
 var welcomeForm = welcome.querySelector("form");
 var room = document.getElementById("room");
-var roomForm = room.querySelector("form");
+var roomMessageForm = room.querySelector("#message");
+var roomNicknameForm = room.querySelector("#nickname");
 room.hidden = true;
 var roomName;
 function addMessage(msg) {
@@ -27,20 +28,25 @@ welcomeForm.addEventListener("submit", function (event) {
     });
     input.value = "";
 });
-roomForm.addEventListener("submit", function (event) {
+roomNicknameForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    var input = roomForm.querySelector("input");
+    var input = roomNicknameForm.querySelector("input");
+    socket.emit("nickname", input.value);
+});
+roomMessageForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var input = roomMessageForm.querySelector("input");
     var newMessage = input.value;
     socket.emit("new_message", newMessage, roomName, function () {
         addMessage("You: ".concat(newMessage));
     });
     input.value = "";
 });
-socket.on("joined", function () {
-    addMessage("someone joined!");
+socket.on("joined", function (user) {
+    addMessage("".concat(user, "} joined!"));
 });
-socket.on("bye", function () {
-    addMessage("someone left!");
+socket.on("bye", function (user) {
+    addMessage("".concat(user, " left!"));
 });
 socket.on("new_message", function (newMessage) {
     addMessage(newMessage);

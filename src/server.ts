@@ -2,9 +2,11 @@ import express from "express";
 import http from "http";
 import path from "path";
 import { Server } from "socket.io";
-import { IConnEvent } from "./types";
-
-type IEvents = "enter_room";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from "./types";
 
 const app = express();
 const port = 3000;
@@ -14,28 +16,42 @@ app.set("view engine", "pug");
 app.use("/public", express.static(__dirname + "/public"));
 
 app.get("/", (req, res) => {
-  res.render("index", { title: "Zoom Clone!" });
+  res.render("index", { title: "Hello, Connect!" });
 });
 
 const httpServer = http.createServer(app);
-const wsServer = new Server(httpServer);
 
-wsServer.on("connection", (socket) => {
+const io = new Server<ClientToServerEvents, ServerToClientEvents, SocketData>(
+  httpServer
+);
+
+io.on("connection", (socket) => {
+  socket.data.nickname = "Anonymous";
+
   socket.onAny((event) => console.log(`Event: ${event}`));
 
-  socket.on<IConnEvent>("enter_room", (roomName, done) => {
+  socket.on("enter_room", (roomName, done) => {
     socket.join(roomName);
     done();
-    socket.to(roomName).emit<IConnEvent>("joined");
+
+    socket.to(roomName).emit("joined", socket.data.nickname);
   });
 
-  socket.on<IConnEvent>("disconnecting", () => {
-    socket.rooms.forEach((room) => socket.to(room).emit<IConnEvent>("bye"));
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("bye", socket.data.nickname)
+    );
   });
 
-  socket.on<IConnEvent>("new_message", (newMessage, roomName, done) => {
-    socket.to(roomName).emit<IConnEvent>("new_message", newMessage);
+  socket.on("new_message", (newMessage, roomName, done) => {
+    socket
+      .to(roomName)
+      .emit("new_message", `${socket.data.nickname}: ${newMessage}}`);
     done();
+  });
+
+  socket.on("nickname", (nickname: string) => {
+    socket.data.nickname = nickname;
   });
 });
 
