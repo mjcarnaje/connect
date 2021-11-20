@@ -39,6 +39,10 @@ io.on("connection", (socket) => {
     return public_rooms;
   }
 
+  function countActive(roomName: string) {
+    return io.sockets.adapter.rooms.get(roomName)?.size || 0;
+  }
+
   socket.onAny((event) => console.log(`Event: ${event}`));
 
   socket.on("enter_room", (nickname, roomId, done) => {
@@ -46,16 +50,18 @@ io.on("connection", (socket) => {
 
     socket.join(roomId);
 
-    done();
+    done(countActive(roomId));
 
-    socket.to(roomId).emit("joined", nickname);
+    socket.to(roomId).emit("welcome", nickname, countActive(roomId));
 
     io.sockets.emit("new_rooms", publicRooms());
   });
 
   socket.on("disconnecting", () => {
     socket.rooms.forEach((room) =>
-      socket.to(room).emit("bye", socket.data.nickname)
+      socket
+        .to(room)
+        .emit("leave_room", socket.data.nickname, countActive(room) - 1)
     );
   });
 

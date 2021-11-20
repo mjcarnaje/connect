@@ -9,10 +9,10 @@ const socket: ISocketClient = io();
 const welcomeDiv = getElement("welcome");
 const roomDiv = getElement("room");
 
-const enterRoomForm = welcomeDiv.querySelector("#enterRoom") as HTMLFormElement;
-const roomMessageForm = roomDiv.querySelector("#message") as HTMLFormElement;
+const enterRoomForm = <HTMLFormElement>welcomeDiv.querySelector("#enterRoom");
+const roomMessageForm = <HTMLFormElement>roomDiv.querySelector("#message");
 
-let roomId: string;
+let ROOM_ID: string;
 roomDiv.hidden = true;
 
 enterRoomForm.addEventListener("submit", handleEnterRoomSubmit);
@@ -22,13 +22,9 @@ function handleEnterRoomSubmit(event: Event) {
   event.preventDefault();
 
   const nickname = getElement("nickname").value;
-  const _roomId = getElement("roomId").value;
+  const roomId = getElement("roomId").value;
 
-  roomId = _roomId;
-
-  socket.emit("enter_room", nickname, _roomId, () => {
-    showRoom(roomId);
-  });
+  enterRoom(nickname, roomId);
 }
 
 function handleNewMessageSubmit(event: Event) {
@@ -36,50 +32,62 @@ function handleNewMessageSubmit(event: Event) {
 
   const newMessage = getElement("newMessage").value;
 
-  socket.emit("new_message", newMessage, roomId, () => {
+  socket.emit("new_message", newMessage, ROOM_ID, () => {
     addMessage(`You: ${newMessage}`);
   });
 
   getElement("newMessage").value = "";
 }
 
+function enterRoom(nickname: string, roomId: string) {
+  ROOM_ID = roomId;
+
+  socket.emit("enter_room", nickname, roomId, (countActive) => {
+    welcomeDiv.hidden = true;
+    roomDiv.hidden = false;
+    const roomTitle = <HTMLHeadingElement>roomDiv.querySelector("h3");
+    roomTitle.innerText = `Room ${ROOM_ID} [${countActive}]`;
+  });
+}
+
 function addMessage(msg: string) {
-  const ul = roomDiv.querySelector("ul") as HTMLUListElement;
+  const ul = <HTMLUListElement>roomDiv.querySelector("ul");
   const li = document.createElement("li");
   li.innerText = msg;
   ul.appendChild(li);
 }
 
-function showRoom(roomId: string) {
-  welcomeDiv.hidden = true;
-  roomDiv.hidden = false;
-  const roomTitle = roomDiv.querySelector("h3") as HTMLHeadingElement;
-  roomTitle.innerText = `Room ${roomId}`;
-}
+// Socket listener
 
-socket.on("joined", (user: string) => {
-  addMessage(`${user} joined!`);
+socket.on("welcome", (user, countActive) => {
+  addMessage(`${user} welcome!`);
+  const roomTitle = <HTMLHeadingElement>roomDiv.querySelector("h3");
+  roomTitle.innerText = `Room ${ROOM_ID} [${countActive}]`;
 });
 
-socket.on("bye", (user: string) => {
+socket.on("leave_room", (user, countActive) => {
+  const roomTitle = <HTMLHeadingElement>roomDiv.querySelector("h3");
+  roomTitle.innerText = `Room ${ROOM_ID} [${countActive}]`;
   addMessage(`${user} left!`);
 });
 
-socket.on("new_message", (newMessage: string) => {
+socket.on("new_message", (newMessage) => {
   addMessage(newMessage);
 });
 
 socket.on("new_rooms", (publicRooms) => {
   const roomList = <HTMLUListElement>welcomeDiv.querySelector("ul");
 
-  roomList.innerHTML = "";
+  console.log(publicRooms);
 
   if (publicRooms.length === 0) {
     roomList.innerHTML = "";
     return;
   }
+
   publicRooms.forEach((publicRoom) => {
     const room = document.createElement("li");
+    room.onclick = () => enterRoom("anonymouse", publicRoom);
     room.innerText = publicRoom;
     roomList.appendChild(room);
   });
