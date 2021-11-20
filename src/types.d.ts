@@ -1,14 +1,14 @@
 export interface ServerToClientEvents {
-  joined: (userNickname: string) => void;
-  bye: (userNickname: string) => void;
+  joined: (nickname: string) => void;
+  bye: (nickname: string) => void;
   new_message: (newMessage: string) => void;
 }
 export interface ClientToServerEvents {
   nickname: (nickname: string) => void;
-  enter_room: (roomName: string, callback: () => void) => void;
+  enter_room: (nickname: string, roomId: string, callback: () => void) => void;
   new_message: (
     newMessage: string,
-    roomName: string,
+    roomId: string,
     callback: () => void
   ) => void;
 }

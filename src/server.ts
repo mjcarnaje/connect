@@ -30,11 +30,14 @@ io.on("connection", (socket) => {
 
   socket.onAny((event) => console.log(`Event: ${event}`));
 
-  socket.on("enter_room", (roomName, done) => {
-    socket.join(roomName);
+  socket.on("enter_room", (nickname, roomId, done) => {
+    socket.data.nickname = nickname;
+
+    socket.join(roomId);
+
     done();
 
-    socket.to(roomName).emit("joined", socket.data.nickname);
+    socket.to(roomId).emit("joined", nickname);
   });
 
   socket.on("disconnecting", () => {
@@ -43,10 +46,10 @@ io.on("connection", (socket) => {
     );
   });
 
-  socket.on("new_message", (newMessage, roomName, done) => {
+  socket.on("new_message", (newMessage, roomId, done) => {
     socket
-      .to(roomName)
-      .emit("new_message", `${socket.data.nickname}: ${newMessage}}`);
+      .to(roomId)
+      .emit("new_message", `${socket.data.nickname}: ${newMessage}`);
     done();
   });
 
