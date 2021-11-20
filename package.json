@@ -1,14 +1,14 @@
 {
-  "name": "zoom-clone",
+  "name": "connect",
   "version": "1.0.0",
-  "description": "Zoom Clone using WebRTC and WebSocket",
+  "description": "Practice WebRTC and WebSocket",
   "main": "index.js",
   "repository": "https://github.com/mjcarnaje/zoom-clone.git",
   "author": "Mj Carnaje",
   "license": "MIT",
   "scripts": {
     "dev:client": "tsc ./src/public/index.ts --watch --module es2015",
-    "dev:server": "ts-node-dev src/index.ts",
+    "dev:server": "ts-node-dev src/server.ts",
     "dev": "concurrently \"yarn dev:client\" \"yarn dev:server\""
   },
   "dependencies": {
